@@ -144,26 +144,28 @@ int main(void)
   //HAL_TIM_Base_Start_IT(&htim1);
   //HAL_TIM_Base_Stop_IT(&htim1);
 
-  //volume_1=500;
-  //volume_2=1000;
+  /*
+  volume_1=500;
+  volume_2=1000;
   volume_3=1500;
   volume_4=2000;
 
 
-  //k_volume_1=68;
-  //k_volume_2=68;
+  k_volume_1=68;
+  k_volume_2=68;
   k_volume_3=68;
   k_volume_4=68;
 
-  //gas_time_1=5;
-  //gas_time_2=5;
+  gas_time_1=5;
+  gas_time_2=5;
   gas_time_3=5;
   gas_time_4=5;
 
-  //drainage_time_1=5;
-  //drainage_time_2=5;
+  drainage_time_1=5;
+  drainage_time_2=5;
   drainage_time_3=5;
   drainage_time_4=5;
+  */
 
 
   //pwm_start_correction=8000;
