@@ -111,34 +111,7 @@ int main(void)
   ILI9341_Set_Rotation(SCREEN_HORIZONTAL_1);
   ILI9341_Draw_Text("Ready to start", 20, 100, WHITE, 3, BLUE);
 
-  load_var(&volume_1_1,1);
-  load_var(&volume_1_2,2);
-  load_var(&k_volume_1,3);
-  load_var(&gas_time_1,4);
-  load_var(&drainage_time_1,5);
-
-  load_var(&volume_2_1,6);
-  load_var(&volume_2_2,7);
-  load_var(&k_volume_2,8);
-  load_var(&gas_time_2,109);
-  load_var(&drainage_time_2,110);
-
-  load_var(&volume_3_1,11);
-  load_var(&volume_3_2,12);
-  load_var(&k_volume_3,13);
-  load_var(&gas_time_3,14);
-  load_var(&drainage_time_3,15);
-
-  load_var(&volume_4_1,16);
-  load_var(&volume_4_2,17);
-  load_var(&k_volume_4,18);
-  load_var(&gas_time_4,19);
-  load_var(&drainage_time_4,20);
-
-  cast_8_to_16(volume_1_1, volume_1_2, &volume_1);
-  cast_8_to_16(volume_2_1, volume_2_2, &volume_2);
-  cast_8_to_16(volume_3_1, volume_3_2, &volume_3);
-  cast_8_to_16(volume_4_1, volume_4_2, &volume_4);
+  load_init();
 
 
   //pwm_start_correction=8000;

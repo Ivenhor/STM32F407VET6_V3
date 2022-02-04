@@ -23,6 +23,7 @@
 //void sensor_test();
 //void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
 void time();
+void load_init();
 //void pwm_test ();
 //void gas(uint8_t gas_time);
 //void pouring (uint8_t volume, uint8_t k_volume);

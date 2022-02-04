@@ -9,11 +9,11 @@
 
 #include "pouring.h"
 
+/*****************************************************************************************************************************************/
+
+
 void save ()
 {
-	 //const char wmsg[] = "10";
-	 //char rmsg[sizeof(wmsg)];
-
 
 	uint8_t data=pwm_start_correction/100;
 	// HAL expects address to be shifted one bit to the left
@@ -37,6 +37,10 @@ void save ()
 
 }
 
+/*****************************************************************************************************************************************/
+
+/*****************************************************************************************************************************************/
+
 void load()
 {
 	uint8_t data;
@@ -53,7 +57,49 @@ void load()
 	ILI9341_Draw_Text(data_buf, 10, 10, WHITE, 2, BLUE);
 
 }
+/*****************************************************************************************************************************************/
 
+/*****************************************************************************************************************************************/
+/**
+ * @brief list f variables to be loaded
+*/
+void load_init()
+{
+	  load_var(&volume_1_1,1);
+	  load_var(&volume_1_2,2);
+	  load_var(&k_volume_1,3);
+	  load_var(&gas_time_1,4);
+	  load_var(&drainage_time_1,5);
+
+	  load_var(&volume_2_1,6);
+	  load_var(&volume_2_2,7);
+	  load_var(&k_volume_2,8);
+	  load_var(&gas_time_2,109);
+	  load_var(&drainage_time_2,110);
+
+	  load_var(&volume_3_1,11);
+	  load_var(&volume_3_2,12);
+	  load_var(&k_volume_3,13);
+	  load_var(&gas_time_3,14);
+	  load_var(&drainage_time_3,15);
+
+	  load_var(&volume_4_1,16);
+	  load_var(&volume_4_2,17);
+	  load_var(&k_volume_4,18);
+	  load_var(&gas_time_4,19);
+	  load_var(&drainage_time_4,20);
+
+	  cast_8_to_16(volume_1_1, volume_1_2, &volume_1);
+	  cast_8_to_16(volume_2_1, volume_2_2, &volume_2);
+	  cast_8_to_16(volume_3_1, volume_3_2, &volume_3);
+	  cast_8_to_16(volume_4_1, volume_4_2, &volume_4);
+}
+/*****************************************************************************************************************************************/
+
+/*****************************************************************************************************************************************/
+/**
+ * @brief math stuff for flow and print info to display
+*/
 void flow ()
 {
 
@@ -92,9 +138,12 @@ void flow ()
 
 
 }
+/*****************************************************************************************************************************************/
 
 
-
+/**
+ * @brief control the PVM valve
+*/
 void pwm_valve()
 {
 	if (liters_per_min<=pouring_speed)
@@ -122,7 +171,12 @@ void pwm_valve()
 	ILI9341_Draw_Text(pwm_buf, 150, 100, WHITE, 2, BLUE);
 	ILI9341_Draw_Text("%", 180, 100, WHITE, 2, BLUE);
 }
+/*****************************************************************************************************************************************/
 
+/*****************************************************************************************************************************************/
+/**
+ * @brief callback for interrupts
+*/
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
         if(htim->Instance == TIM1) //check if the interrupt comes from TIM1
@@ -139,7 +193,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         			}
                 }
 }
+/*****************************************************************************************************************************************/
 
+
+/*****************************************************************************************************************************************/
+/**
+ * @brief count time
+*/
 void time()
 {
 	//uint16_t sec=0;
@@ -158,7 +218,11 @@ void time()
 }
 
 
-
+/*****************************************************************************************************************************************/
+/**
+ * @brief check for errors
+ * @param gas_time - what gas time to check for error
+*/
 void error_check(uint16_t gas_time)
 {
 	if(pulses<=10 && sec-gas_time>2)										// check flow
@@ -175,7 +239,12 @@ void error_check(uint16_t gas_time)
 	}
 
 }
+/*****************************************************************************************************************************************/
 
+/*****************************************************************************************************************************************/
+/**
+ * @brief try to handle with errors
+*/
 void error_hendler()
 {
 	if (start_pulse_error==1)
@@ -190,8 +259,15 @@ void error_hendler()
 
 }
 
+/*****************************************************************************************************************************************/
 
-void start_sequence(uint16_t k_volume, uint16_t gas_time)											// do start stuff
+/*****************************************************************************************************************************************/
+/**
+ * @brief do start stuff
+ * @param k_volume - what param to use for start of process
+ * @param gas_time - what param to use for start of process
+*/
+void start_sequence(uint16_t k_volume, uint16_t gas_time)
 {
 	HAL_TIM_Base_Start_IT(&htim1);
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_4);
@@ -199,14 +275,10 @@ void start_sequence(uint16_t k_volume, uint16_t gas_time)											// do start 
 	ILI9341_Fill_Screen(BLUE);
 
 	load();
-	//load_var(k_volume_1, 2);
-	//gas_time=5;
-	//drainage_time=5;
+
 	PWM=5000;
-	//volume=100;
 	pouring_speed=1;
 	step=50;
-	//k_volume=68;
 
 	start_control_time=gas_time+2;
 
@@ -227,7 +299,13 @@ void start_sequence(uint16_t k_volume, uint16_t gas_time)											// do start 
 
 
 }
-void stop_sequence()													// do stop stuff
+/*****************************************************************************************************************************************/
+
+/*****************************************************************************************************************************************/
+/**
+ * @brief do stop stuff
+*/
+void stop_sequence()
 {
 	liters_per_min=0;
 	pulses_per_sec=0;
@@ -244,8 +322,14 @@ void stop_sequence()													// do stop stuff
 	HAL_TIM_Base_Stop_IT(&htim1);
 	HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_4);
 }
+/*****************************************************************************************************************************************/
 
-void gas(uint16_t gas_time)													// start gas sequence
+/*****************************************************************************************************************************************/
+/**
+ * @brief start gas sequence
+ * @param gas_time - what param to use
+*/
+void gas(uint16_t gas_time)
 {
 	HAL_GPIO_WritePin(GPIOE, Load_out_2_Pin, GPIO_PIN_SET);					// Open EPK1
 	TIM3->CCR4=9999;														// Close drainage
@@ -254,8 +338,16 @@ void gas(uint16_t gas_time)													// start gas sequence
 	TIM3->CCR4=PWM;															//start drainage control
 	HAL_GPIO_WritePin(GPIOE, Load_out_3_Pin, GPIO_PIN_SET);                 //Open EGK1
 }
+/*****************************************************************************************************************************************/
 
-void pouring (uint16_t volume, uint16_t k_volume, uint16_t gas_time)								// start pouring sequence
+/*****************************************************************************************************************************************/
+/**
+ * @brief start pouring sequence
+ * @param volume - what param to use
+ * @param k_voume - what param to use
+ * @param gas_time - what param to use
+*/
+void pouring (uint16_t volume, uint16_t k_volume, uint16_t gas_time)
 {
 
 	pulses=0;
@@ -273,25 +365,40 @@ void pouring (uint16_t volume, uint16_t k_volume, uint16_t gas_time)								// s
 
 }
 
-void drainage(uint16_t drainage_time)										// start drainage sequence
+/*****************************************************************************************************************************************/
+
+/*****************************************************************************************************************************************/
+/**
+ * @brief start drainage sequence
+ * @param drainage_time - what param to use
+*/
+void drainage(uint16_t drainage_time)
 {
 	HAL_GPIO_WritePin(GPIOE, Load_out_3_Pin, GPIO_PIN_RESET);				//Close EGK1
 	TIM3->CCR4=PWM;															//start drainage control
 	HAL_Delay(drainage_time*1000);
 	TIM3->CCR4=0;
 }
+/*****************************************************************************************************************************************/
 
-void filling_cycle(uint16_t volume, uint16_t k_volume, uint16_t gas_time, uint16_t drainage_time)		//full cycle of pouring
+/*****************************************************************************************************************************************/
+/**
+ * @brief full cycle of pouring
+ * @param volume - what param to use
+ * @param k_volume - what param to use
+ * @param gas_time - what param to use
+ * @param drainage_time - what param to use
+*/
+void filling_cycle(uint16_t volume, uint16_t k_volume, uint16_t gas_time, uint16_t drainage_time)
 {
 
-	//load();
 	  start_sequence(k_volume, gas_time);
 	  gas(gas_time);
 	  pouring(volume, k_volume,drainage_time);
 	  drainage(drainage_time);
 	  stop_sequence();
-	  //save();
 
 	  sec=0;
 	  main_screen();
 }
+/*****************************************************************************************************************************************/
