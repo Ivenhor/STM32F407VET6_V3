@@ -18,7 +18,7 @@ void save ()
 	uint8_t data=pwm_start_correction/100;
 	// HAL expects address to be shifted one bit to the left
 	uint16_t devAddr = (0x50 << 1);
-	uint16_t memAddr = 0x0100;
+	uint16_t memAddr = 21;
 	HAL_StatusTypeDef status;
 
 	HAL_I2C_Mem_Write(&hi2c2, devAddr, memAddr, I2C_MEMADD_SIZE_16BIT,
@@ -42,7 +42,7 @@ void load()
 	uint8_t data;
 	// HAL expects address to be shifted one bit to the left
 	uint16_t devAddr = (0x50 << 1);
-	uint16_t memAddr = 0x0100;
+	uint16_t memAddr = 21;
 
 	HAL_I2C_Mem_Read(&hi2c2, devAddr, memAddr, I2C_MEMADD_SIZE_16BIT,
 			&data, 1, HAL_MAX_DELAY);

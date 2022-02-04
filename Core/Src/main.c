@@ -141,33 +141,6 @@ int main(void)
   cast_8_to_16(volume_4_1, volume_4_2, &volume_4);
 
 
-  //HAL_TIM_Base_Start_IT(&htim1);
-  //HAL_TIM_Base_Stop_IT(&htim1);
-
-  /*
-  volume_1=500;
-  volume_2=1000;
-  volume_3=1500;
-  volume_4=2000;
-
-
-  k_volume_1=68;
-  k_volume_2=68;
-  k_volume_3=68;
-  k_volume_4=68;
-
-  gas_time_1=5;
-  gas_time_2=5;
-  gas_time_3=5;
-  gas_time_4=5;
-
-  drainage_time_1=5;
-  drainage_time_2=5;
-  drainage_time_3=5;
-  drainage_time_4=5;
-  */
-
-
   //pwm_start_correction=8000;
 
   /* USER CODE END 2 */
@@ -177,26 +150,15 @@ int main(void)
   while (1)
   {
 
-	  //time();
-	  //sensor_test();
-	  /*
-	  if (HAL_GPIO_ReadPin(GPIOA, Sensor_Pin)==1)
-	  {
-		  HAL_GPIO_TogglePin(GPIOB, Signal_LED_Pin);
-	  }
-	  */
 	  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_8)==0)
 	  	  		{
-		  	  	  //HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_4);
 	  		  	  ILI9341_Draw_Text("Button 1 ok", 10, 10, WHITE, 2, BLUE);
 	  		  	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
-	  		  	  //pwm_test();
-	  		  	  //gas();
+
 	  		  	  filling_cycle(volume_1, k_volume_1, gas_time_1, drainage_time_1);
-	  		  	  //HAL_Delay(1000);
+
 	  	  		} else {
-	  	  			//HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_4);
-	  	  			//ILI9341_Fill_Screen(BLUE );
+
 	  	  			HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
 	  	  		}
 	  	  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_6)==0)
@@ -204,9 +166,7 @@ int main(void)
 	  	  		  	  ILI9341_Draw_Text("Button 2 ok", 10, 10, WHITE, 2, BLUE);
 	  	  		  	  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
 	  	  		  	  filling_cycle(volume_2, k_volume_2, gas_time_2, drainage_time_2);
-	  	  		  	//HAL_Delay(1000);
 	  	  	  		} else {
-	  	  	  			//ILI9341_Fill_Screen(BLUE );
 	  	  	  			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
 	  	  	  		}
 	  	  if(HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_14)==0)
@@ -214,24 +174,21 @@ int main(void)
 	  	  		  	  ILI9341_Draw_Text("Button 3 ok", 10, 10, WHITE, 2, BLUE);
 	  	  		  	  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET);
 	  	  		  	  filling_cycle(volume_3, k_volume_3, gas_time_3, drainage_time_3);
-	  	  		  	//HAL_Delay(1000);
 	  	  	  		} else {
-	  	  	  			//ILI9341_Fill_Screen(BLUE );
+
 	  	  	  			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_RESET);
 	  	  	  		}
 	  	  if(HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_12)==0)
 	  	  	  		{
-	  		  	  	  //ILI9341_Reset();
+
 	  	  		  	  ILI9341_Draw_Text("Button 4 ok", 10, 10, WHITE, 2, BLUE);
 	  	  		  	  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
 	  	  		  	  filling_cycle(volume_4, k_volume_4, gas_time_4, drainage_time_4);
-	  	  		  	//HAL_Delay(1000);
 	  	  	  		} else {
-	  	  	  			//ILI9341_Fill_Screen(BLUE );
+
 	  	  	  			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_RESET);
 	  	  	  		}
 
-	  	  //if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5)==0)
 	  	  switch_menu();
 
 
